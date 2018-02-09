@@ -1,9 +1,23 @@
 ﻿<?php include 'inc/header.php';?>
 <?php include 'inc/sidebar.php';?>
+<?php include '../classes/Product.php'; ?>
+<?php include '../classes/Brand.php'; ?>
+<?php include '../classes/Category.php'; ?>
+<?php 
+$pd = new Product();
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
+    $insertProduct = $pd->productInsert($_POST, $_FILES);
+}
+?>
 <div class="grid_10">
     <div class="box round first grid">
         <h2>Add New Product</h2>
-        <div class="block">               
+        <div class="block">
+        <?php 
+        if (isset($insertProduct)) {
+            echo $insertProduct;
+        }
+         ?>               
          <form action="" method="post" enctype="multipart/form-data">
             <table class="form">
                
@@ -12,50 +26,65 @@
                         <label>Name</label>
                     </td>
                     <td>
-                        <input type="text" placeholder="Enter Product Name..." class="medium" />
+                        <input type="text" name="productName" placeholder="Enter Product Name..." class="medium" />
                     </td>
                 </tr>
-				<tr>
+                <tr>
                     <td>
                         <label>Category</label>
                     </td>
                     <td>
-                        <select id="select" name="select">
+                        <select id="select" name="catId">
                             <option>Select Category</option>
-                            <option value="1">Category One</option>
-                            <option value="2">Category Two</option>
-                            <option value="3">Category Three</option>
+                            <?php 
+                            $cat = new Category();
+                            $getCat = $cat->getAllCat();
+                            if ($getCat) {
+                                while ($result = $getCat->fetch_assoc()) {
+                                    ?>
+                            <option value="<?php echo $result['catId']; ?>"><?php echo $result['catName']; ?></option>
+                            <?php
+                                }
+                            } ?>                          
                         </select>
                     </td>
                 </tr>
-				<tr>
+                <tr>
                     <td>
                         <label>Brand</label>
                     </td>
                     <td>
-                        <select id="select" name="select">
+                        <select id="select" name="brandId">
                             <option>Select Brand</option>
-                            <option value="1">Brand One</option>
-                            <option value="2">Brand Two</option>
-                            <option value="3">Brand Three</option>
+                            <?php 
+                            $brand = new Brand();
+                            $getBrand = $brand->getAllBrand();
+                            if ($getBrand) {
+                                while ($result = $getBrand->fetch_assoc()) {
+                                    ?>
+                            <option value="<?php echo $result['brandId']; ?>"><?php echo $result['brandName']; ?></option>
+                            <?php
+                                }
+                            } ?>
+                           
                         </select>
                     </td>
                 </tr>
-				
-				 <tr>
+                
+                 <tr>
                     <td style="vertical-align: top; padding-top: 9px;">
                         <label>Description</label>
                     </td>
                     <td>
-                        <textarea class="tinymce"></textarea>
+                        <textarea class="tinymce" name="body"></textarea>
                     </td>
                 </tr>
-				<tr>
+                <tr>
                     <td>
                         <label>Price</label>
                     </td>
                     <td>
-                        <input type="text" placeholder="Enter Price..." class="medium" />
+                        <input type="text" name="price" placeholder="Enter Price..." class="medium" />
                     </td>
                 </tr>
             
@@ -64,24 +93,24 @@
                         <label>Upload Image</label>
                     </td>
                     <td>
-                        <input type="file" />
+                        <input type="file" name="image" />
                     </td>
                 </tr>
-				
-				<tr>
+                
+                <tr>
                     <td>
                         <label>Product Type</label>
                     </td>
                     <td>
-                        <select id="select" name="select">
+                        <select id="select" name="type">
                             <option>Select Type</option>
-                            <option value="1">Featured</option>
-                            <option value="2">Non-Featured</option>
+                            <option value="0">Featured</option>
+                            <option value="1">General</option>
                         </select>
                     </td>
                 </tr>
 
-				<tr>
+                <tr>
                     <td></td>
                     <td>
                         <input type="submit" name="submit" Value="Save" />

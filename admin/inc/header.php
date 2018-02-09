@@ -1,7 +1,12 @@
+<?php 
+include '../lib/Session.php';
+Session::checkSession();
+
+ ?>
 <?php
   header("Cache-Control: no-cache, must-revalidate");
-  header("Pragma: no-cache"); 
-  header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
+  header("Pragma: no-cache");
+  header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
   header("Cache-Control: max-age=2592000");
 ?>
 <!DOCTYPE html>
@@ -28,10 +33,10 @@
     <!-- END: load jquery -->
     <script type="text/javascript" src="js/table/table.js"></script>
     <script src="js/setup.js" type="text/javascript"></script>
-	 <script type="text/javascript">
+     <script type="text/javascript">
         $(document).ready(function () {
             setupLeftMenu();
-		    setSidebarHeight();
+            setSidebarHeight();
         });
     </script>
 
@@ -42,18 +47,23 @@
             <div id="branding">
                 <div class="floatleft logo">
                     <img src="img/livelogo.png" alt="Logo" />
-				</div>
-				<div class="floatleft middle">
-					<h1>Training with live project</h1>
-					<p>www.trainingwithliveproject.com</p>
-				</div>
+                </div>
+                <div class="floatleft middle">
+                    <h1>Training with live project</h1>
+                    <p>www.trainingwithliveproject.com</p>
+                </div>
                 <div class="floatright">
                     <div class="floatleft">
                         <img src="img/img-profile.jpg" alt="Profile Pic" /></div>
+                        <?php 
+                        if (isset($_GET['action']) && $_GET['action'] == "logout") {
+                            Session::destroy();
+                        }
+                         ?>
                     <div class="floatleft marginleft10">
                         <ul class="inline-ul floatleft">
-                            <li>Hello Admin</li>
-                            <li><a href="#">Logout</a></li>
+                            <li>Hello <?php echo Session::get('adminName'); ?></li>
+                            <li><a href="?action=logout">Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -65,10 +75,10 @@
         </div>
         <div class="grid_12">
             <ul class="nav main">
-                <li class="ic-dashboard"><a href="index.php"><span>Dashboard</span></a> </li>
+                <li class="ic-dashboard"><a href="dashboard.php"><span>Dashboard</span></a> </li>
                 <li class="ic-form-style"><a href=""><span>User Profile</span></a></li>
-				<li class="ic-typography"><a href="changepassword.php"><span>Change Password</span></a></li>
-				<li class="ic-grid-tables"><a href="inbox.php"><span>Inbox</span></a></li>
+                <li class="ic-typography"><a href="changepassword.php"><span>Change Password</span></a></li>
+                <li class="ic-grid-tables"><a href="inbox.php"><span>Inbox</span></a></li>
                 <li class="ic-charts"><a href=""><span>Visit Website</span></a></li>
             </ul>
         </div>

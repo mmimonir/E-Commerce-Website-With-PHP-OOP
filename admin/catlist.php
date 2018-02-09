@@ -1,9 +1,22 @@
 ﻿<?php include 'inc/header.php';?>
 <?php include 'inc/sidebar.php';?>
+<?php include '../classes/Category.php'; ?>
+<?php 
+$cat = new Category();
+if (isset($_GET['delcat'])) {
+    $id = preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['delcat']);
+    $delCat = $cat->delCatById($id);
+}
+ ?>
         <div class="grid_10">
             <div class="box round first grid">
                 <h2>Category List</h2>
-                <div class="block">        
+                <div class="block">
+                <?php 
+                if (isset($delCat)) {
+                    echo $delCat;
+                }
+                 ?>        
                     <table class="data display datatable" id="example">
 					<thead>
 						<tr>
@@ -13,46 +26,20 @@
 						</tr>
 					</thead>
 					<tbody>
+						<?php 
+                        $getCat = $cat->getAllCat();
+                        if ($getCat) {
+                            $i=0;
+                            while ($result = $getCat->fetch_assoc()) {
+                                $i++; ?>
 						<tr class="odd gradeX">
-							<td>01</td>
-							<td>Internet</td>
-							<td><a href="">Edit</a> || <a href="">Delete</a></td>
+							<td><?php echo $i; ?></td>
+							<td><?php echo $result['catName']; ?></td>
+							<td><a href="catedit.php?catid=<?php echo $result['catId']; ?>">Edit</a> || <a onclick="return confirm('Are you sure to delete this?')" href="?delcat=<?php echo $result['catId']; ?>">Delete</a></td>
 						</tr>
-						<tr class="even gradeC">
-							<td>02</td>
-							<td>Explorer </td>
-							<td><a href="">Edit</a> || <a href="">Delete</a></td>
-						</tr>
-						<tr class="odd gradeX">
-							<td>03</td>
-							<td>Internet</td>
-							<td><a href="">Edit</a> || <a href="">Delete</a></td>
-						</tr>
-						<tr class="even gradeC">
-							<td>04</td>
-							<td>Explorer </td>
-							<td><a href="">Edit</a> || <a href="">Delete</a></td>
-						</tr>
-							<tr class="odd gradeX">
-							<td>05</td>
-							<td>Internet</td>
-							<td><a href="">Edit</a> || <a href="">Delete</a></td>
-						</tr>
-						<tr class="even gradeC">
-							<td>06</td>
-							<td>Explorer </td>
-							<td><a href="">Edit</a> || <a href="">Delete</a></td>
-						</tr>
-						<tr class="odd gradeX">
-							<td>07</td>
-							<td>Internet</td>
-							<td><a href="">Edit</a> || <a href="">Delete</a></td>
-						</tr>
-						<tr class="even gradeC">
-							<td>08</td>
-							<td>Explorer </td>
-							<td><a href="">Edit</a> || <a href="">Delete</a></td>
-						</tr>
+						<?php
+                            }
+                        } ?>
 					</tbody>
 				</table>
                </div>
