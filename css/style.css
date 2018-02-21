@@ -41,6 +41,8 @@ body{
 	float:left;
 	width:33%;
 }
+.success{font-size:18px; color:green;}
+.error{font-size:18px; color:red;}
 /**** Header Top Right ****/
 .header_top_right{
 	float:left;
@@ -190,9 +192,9 @@ input[type="number"] {
   padding: 20px;
   width: 712px;
 }
-.register_account form input[type="text"],.register_account form select{
+.register_account form input[type="text"], input[type="password"].register_account form select{
 	font-size:12px;
-	color:#B3B1B1;
+	color:#444;
 	padding:8px;
 	outline:none;
 	margin:5px 0;

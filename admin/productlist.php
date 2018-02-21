@@ -6,10 +6,21 @@
 $pd = new Product();
 $fm = new Format();
  ?>
+ <?php 
+if (isset($_GET['delpro'])) {
+    $id = preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['delpro']);
+    $delPro = $pd->delProById($id);
+}
+ ?>
 
 <div class="grid_10">
     <div class="box round first grid">
         <h2>Post List</h2>
+        <?php 
+                if (isset($delPro)) {
+                    echo $delPro;
+                }
+                 ?>
         <div class="block">  
             <table class="data display datatable" id="example">
 			<thead>
@@ -50,7 +61,7 @@ $fm = new Format();
                         } ?>
 							
 						</td>					
-					<td><a href="">Edit</a> || <a href="">Delete</a></td>
+					<td><a href="productedit.php?proid=<?php echo $result['productId']; ?>">Edit</a> || <a onclick="return confirm('Are you sure to delete this?')" href="?delpro=<?php echo $result['productId']; ?>">Delete</a></td>
 				</tr>
 				<?php
                     }

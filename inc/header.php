@@ -1,3 +1,28 @@
+<?php 
+include 'lib/Session.php';
+Session::init();
+include 'lib/Database.php';
+include 'helpers/Format.php';
+// include 'classes/Product2.php';
+// include 'classes/Cart.php';
+
+spl_autoload_register(function ($class) {
+    include_once "classes/".$class.".php";
+});
+$db = new Database();
+$fm = new Format();
+$pd = new Product();
+$ct = new Cart();
+$cat = new Category();
+$cmr = new Customer();
+
+ ?>
+<?php
+  header("Cache-Control: no-cache, must-revalidate");
+  header("Pragma: no-cache");
+  header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+  header("Cache-Control: max-age=2592000");
+?>
 <!DOCTYPE HTML>
 <head>
 <title>Store Website</title>
@@ -36,11 +61,44 @@
 					<div class="cart">
 						<a href="#" title="View my shopping cart" rel="nofollow">
 								<span class="cart_title">Cart</span>
-								<span class="no_product">(empty)</span>
+								<span class="no_product">
+								<?php 
+                                $getData = $ct->checkCartItem();
+                                if ($getData) {
+                                    $sum = Session::get("gTotal");
+                                    $qty = Session::get("qty");
+                                    echo "$".number_format($sum).".00"." | Qty: ".$qty;
+                                } else {
+                                    echo '(Empty)';
+                                }
+                                
+                                 ?>
+								</span>
 							</a>
 						</div>
 			      </div>
-		   <div class="login"><a href="login.php">Login</a></div>
+			      <?php 
+                  if (isset($_GET['cid'])) {
+                      $delData = $ct->delCustomerCart();
+                      Session::destroy();
+                  }
+                   ?>
+		   <div class="login">
+		   	<?php 
+$login = Session::get("cuslogin");
+if ($login == false) {
+    ?>
+    <a href="login.php">Login</a>
+<?php
+} else {
+        ?>
+<a href="?cid=<?php Session::get('cmrId'); ?>">Logout</a>
+<?php
+    }
+ ?>
+		   	
+
+		   </div>
 		 <div class="clear"></div>
 	 </div>
 	 <div class="clear"></div>
@@ -50,7 +108,26 @@
 	  <li><a href="index.php">Home</a></li>
 	  <li><a href="products.php">Products</a> </li>
 	  <li><a href="topbrands.php">Top Brands</a></li>
-	  <li><a href="cart.php">Cart</a></li>
+	  <?php 
+      $chkCart = $ct->checkCartItem();
+      if ($chkCart) {
+          ?>
+      	<li><a href="cart.php">Cart</a></li>
+      	<li><a href="payment.php">Payment</a></li>
+      <?php
+      }
+       ?>
+	  
+<?php 
+$login = Session::get("cuslogin");
+if ($login == true) {
+    ?>
+	<li><a href="profile.php">Profile</a></li>
+<?php
+}
+ ?>
+	  
+
 	  <li><a href="contact.php">Contact</a> </li>
 	  <div class="clear"></div>
 	</ul>

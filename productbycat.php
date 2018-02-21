@@ -1,69 +1,37 @@
 <?php include 'inc/header.php'; ?>
-
+<?php 
+if (!isset($_GET['catId']) || $_GET['catId'] == null) {
+    echo "<script>window.location = '404.php';</script>";
+} else {
+    $catId = preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['catId']);
+}
+ ?>
  <div class="main">
     <div class="content">
     	<div class="content_top">
     		<div class="heading">
-    		<h3>Latest from Iphone</h3>
+    		<h3>Latest from Category</h3>
     		</div>
     		<div class="clear"></div>
     	</div>
 	      <div class="section group">
+	      	<?php 
+              $productByCat = $pd->productByCat($catId);
+              if ($productByCat) {
+                  while ($result = $productByCat->fetch_assoc()) {
+                      ?>
 				<div class="grid_1_of_4 images_1_of_4">
-					 <a href="preview-3.php"><img src="images/feature-pic1.png" alt="" /></a>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-					 <p><span class="price">$505.22</span></p>
-				     <div class="button"><span><a href="preview.php" class="details">Details</a></span></div>
+					 <a href="details.php?proId=<?php echo $result['productId']; ?>"><img src="admin/<?php echo $result['image']; ?>" alt="" /></a>
+					 <h2><?php echo $result['productName']; ?></h2>
+					 <p><?php echo $fm->textShorten($result['body'], 40); ?></p>
+					 <p><span class="price">$<?php echo $result['price']; ?></span></p>
+				     <div class="button"><span><a href="details.php?proId=<?php echo $result['productId']; ?>" class="details">Details</a></span></div>
 				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-					<a href="preview-2.php"><img src="images/feature-pic2.jpg" alt="" /></a>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-					 <p><span class="price">$620.87</span></p> 
-				     <div class="button"><span><a href="preview.php" class="details">Details</a></span></div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-					<a href="preview-4.php"><img src="images/feature-pic3.jpg" alt="" /></a>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-					 <p><span class="price">$220.97</span></p>
-				     <div class="button"><span><a href="preview.php" class="details">Details</a></span></div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-					<img src="images/feature-pic4.png" alt="" />
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-					 <p><span class="price">$415.54</span></p> 
-				     <div class="button"><span><a href="preview.php" class="details">Details</a></span></div>
-				</div>
-				
-				
-				<div class="grid_1_of_4 images_1_of_4" style="margin-left:0">
-					 <a href="preview-3.php"><img src="images/new-pic1.jpg" alt="" /></a>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p><span class="price">$403.66</span></p>
-				    
-				     <div class="button"><span><a href="preview.php" class="details">Details</a></span></div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-					<a href="preview-4.php"><img src="images/new-pic2.jpg" alt="" /></a>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p><span class="price">$621.75</span></p>
-				     <div class="button"><span><a href="preview.php" class="details">Details</a></span></div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-					<a href="preview-2.php"><img src="images/feature-pic2.jpg" alt="" /></a>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p><span class="price">$428.02</span></p>
-				     <div class="button"><span><a href="preview.php" class="details">Details</a></span></div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-				 <img src="images/new-pic3.jpg" alt="" />
-					 <h2>Lorem Ipsum is simply </h2>					 
-					 <p><span class="price">$457.88</span></p>   
-				     <div class="button"><span><a href="preview.php" class="details">Details</a></span></div>
-				</div>
+				<?php
+                  }
+              } else {
+                  echo "<script>window.location = '404.php';</script>";
+              } ?>
 			</div>
 
 	
