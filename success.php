@@ -6,18 +6,34 @@ if ($login == false) {
 }
  ?>
 <style type="text/css">
-.payment{width: 500px; min-height: 200px; text-align: center; border: 1px solid #ddd; margin: 0 auto; padding:50px;}	
-.payment h2{border-bottom: 1px solid #ddd; margin-bottom: 40px; padding-bottom: 10px;}	
-.payment a{background: #3C3B40; border-radius: 3px; color:#fff; font-size:22px; padding:5px 30px;}
-.back a{width:150px; margin: 5px auto 0; padding: 7px 0; text-align: center; display: block; background: #555; border:1px solid #333; color: #fff; border-radius: 3px; font-size: 25px; }	
-</style>
- 
+.psuccess{width: 500px; min-height: 200px; text-align: center; border: 1px solid #ddd; margin: 0 auto; padding:50px;}	
+.psuccess h2{border-bottom: 1px solid #ddd; margin-bottom: 20px; padding-bottom: 10px;}	
+.psuccess p{line-height:25px; font-size:18px; text-align: left; }
+ </style>
 <div class="main">
 	<div class="content">
 		<div class="section group">
-		<div class="payment">
+		<div class="psuccess">
 			<h2>Success</h2>
-			<p>Payment Successfull.</p>			
+			<?php 
+            $cmrId = Session::get("cmrId");
+            $amount = $ct->payableAmount($cmrId);
+            if ($amount) {
+                $sum = 0;
+                while ($result = $amount->fetch_assoc()) {
+                    $price = $result['price'];
+                    $sum = $sum + $price;
+                }
+            }
+             ?>
+			<p>Total Payable Amount (Including VAT) : $
+			<?php 
+            $vat = $sum * 0.1;
+            $total = $sum + $vat;
+            echo $total;
+            ?>
+			</p>			
+			<p>Thanks for Purchage. Receive Your Order Successfully. We will contact you ASAP with delivery details. Here is your order details....<a href="orderdetails.php">Visit Here....</a></p>			
 		</div>
 					
 		</div>
