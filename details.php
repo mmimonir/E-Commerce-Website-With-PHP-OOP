@@ -1,21 +1,29 @@
 <?php include 'inc/header.php'; ?>
 <?php
-if (!isset($_GET['proId']) || $_GET['proId'] == null) {
-    echo "<script>window.location = '404.php';</script>";
-} else {
+if (isset($_GET['proId'])) {
     $proId = preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['proId']);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     $quantity = $_POST['quantity'];
-
-    if ($quantity <= 0) {
-        $minProAlert = "<span class='error'>Please select minimum one product</span>";
-    } else {
-        $addCart = $ct->addToCart($quantity, $proId);
-    }
+    $addCart = $ct->addToCart($quantity, $proId);
 }
 ?>
+<?php 
+$cmrId = Session::get("cmrId");
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['compare'])) {
+    $productId = $_POST['productId'];
+    $insertCom = $pd->insertCompareDara($productId, $cmrId);
+}
+?>
+<?php 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['wlist'])) {
+    $saveWlist = $pd->saveWishListData($proId, $cmrId);
+}
+?>
+<style type="text/css">
+	.mybutton{widows: 100px; float:left; margin-right: 30px;}
+</style>
 <div class="main">
 	<div class="content">
 		<div class="section group">
@@ -50,6 +58,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             echo $addCart;
                         } ?>
 					</span>
+					<?php if (isset($insertCom)) {
+                            echo $insertCom;
+                        }
+                        if (isset($saveWlist)) {
+                            echo $saveWlist;
+                        } ?>
+                        <?php 
+                        $login = Session::get("cuslogin");
+                        if ($login == true) {
+                            ?>
+                    <div class="add-cart">
+                    	<div class="mybutton">
+						<form action="" method="post">
+							<input type="hidden" class="buyfield" name="productId" value="<?php echo $result['productId']; ?>"/>							
+							<input type="submit" class="buysubmit" name="compare" value="Add to Compare"/>
+						</form>
+						</div>
+						<div class="mybutton">
+						<form action="" method="post">							
+							<input type="submit" class="buysubmit" name="wlist" value="Add to List"/>
+						</form>
+						</div>
+					</div>
+					<?php
+                        } ?>					
 				</div>
 				<div class="product-desc">
 					<h2>Product Details</h2>

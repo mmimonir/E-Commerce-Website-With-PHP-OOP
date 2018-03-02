@@ -5,6 +5,15 @@ if ($login == false) {
     header("Location:login.php");
 }
  ?>
+ <?php 
+if (isset($_GET['customerId'])) {
+    $id 	= $_GET['customerId'];
+    $time 	= $_GET['time'];
+    $price 	= $_GET['price'];
+
+    $confirm = $ct->productShiftConfirm($id, $time, $price);
+}
+  ?>
  <style type="text/css">
  	.tblone  tr td{text-align: justify;}
  </style>
@@ -37,24 +46,26 @@ if ($login == false) {
 								<td><img src="admin/<?php echo $result['image']; ?>" alt=""/></td>
 								<td style="text-align:center;">$<?php echo $result['quantity'].".00"; ?></td>
 								
-								<td>$<?php
-                                $total =  $result['price'];
-                                    echo number_format($total).".00"; ?></td>
+								<td>$<?php echo number_format($result['price']).".00"; ?></td>
                                 <td><?php echo $fm->formatDate($result['date']); ?></td>
                                 <td><?php
                                 if ($result['status'] == '0') {
                                     echo "Pending";
-                                } else {
+                                } elseif ($result['status'] == '1') {
                                     echo "Shifted";
+                                } else {
+                                    echo "Ok";
                                 } ?></td>
                                 <?php if ($result['status'] == '1') {
                                     ?>
-								<td><a onclick="return confirm('Are you sure to delete?');" href="">X</a></td>
+								<td><a href="?customerId=<?php echo $cmrId; ?>&price=<?php echo $result['price']; ?>&time=<?php echo $result['date']; ?>">Confirm</a></td>
                                 <?php
-                                } else {
+                                } elseif ($result['status'] == '2') {
                                     ?>
-								<td>N/A</td>
+								<td>Ok</td>
                                 <?php
+                                } elseif ($result['status'] == '0') {
+                                    echo "<td>N/A</td>";
                                 } ?>
 								
 							</tr>
